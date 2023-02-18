@@ -14,11 +14,14 @@ def on_connect(client, userdata, flags, rc):
 
     print("Connected to server (i.e., broker) with result code "+str(rc))
     #replace user with your USC username in all subscriptions
-    client.subscribe("user/ipinfo")
+    client.subscribe("imagalla/ipinfo")
+    client.subscribe("imagalla/dateinfo")
+    client.subscribe("imagalla/default")
     
     #Add the custom callbacks by indicating the topic and the name of the callback handle
-    client.message_callback_add("user/ipinfo", on_message_from_ipinfo)
-
+    client.message_callback_add("imagalla/ipinfo", on_message_from_ipinfo)
+    client.message_callback_add("imagalla/dateinfo", on_message_from_dateinfo)
+    client.message_callback_add("imagalla/default", on_message)
 
 """This object (functions are objects!) serves as the default callback for 
 messages received when another node publishes a message this client is 
@@ -29,8 +32,9 @@ def on_message(client, userdata, msg):
 
 #Custom message callback.
 def on_message_from_ipinfo(client, userdata, message):
-   print("Custom callback  - IP Message: "+message.payload.decode())
-
+   print("Custom callback - IP Message: "+message.payload.decode())
+def on_message_from_dateinfo(client, userdata, message):
+    print("Custom callback - Date: "+message.payload.decode())
 
 
 
